@@ -56,6 +56,7 @@ def eval_one_rating(idx):
     
     # Evaluate top rank list
     ranklist = heapq.nlargest(_K, map_item_score, key=map_item_score.get)
+    print(ranklist)
     hr = get_hit_ratio(ranklist, gtItem)
     ndcg = get_ndcg(ranklist, gtItem)
     return hr, ndcg

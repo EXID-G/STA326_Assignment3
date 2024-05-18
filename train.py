@@ -45,7 +45,7 @@ def model_train(config, num_of_negatives=4, preprocessed_filepath = "preprocesse
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     best_hr, best_ndcg, best_epoch = 0, 0, 0
-
+    evaluate_model(model, testing_ratings_list, negative_sample_list, 10, num_thread=1,device = device)
     ####* train model
     for epoch in tqdm(range(num_of_epochs)):
         model.train()
