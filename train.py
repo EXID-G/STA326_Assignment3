@@ -22,11 +22,18 @@ def model_train(config, num_of_negatives=4, preprocessed_filepath = "preprocesse
     )
     print(f"Using {device} device")
 
-    ####* init dataset and dataloader
+    ####! init dataset and dataloader
     rating_mat, num_of_user, num_of_item, negative_sample_list, testing_ratings_list = init_train_data(preprocessed_filepath)
-    # print("after init",num_of_user, num_of_item)
-    train_dataset = RatingDataset(rating_mat, negative_sample_list, num_of_user, num_of_item, num_of_negatives)
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    # # print("after init",num_of_user, num_of_item)
+    # train_dataset = RatingDataset(rating_mat, negative_sample_list, num_of_user, num_of_item, num_of_negatives)
+    # train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    dataset = Dataset("./Data/"+"ml-1m")
+    train, testRatings, testNegatives = dataset.trainMatrix, dataset.testRatings, dataset.testNegatives
+    num_of_user, num_of_item = train.shape
+    user_input, item_input, labels = get_train_instances(train, num_negatives=4)
+    train_dataset = mlDataset(user_input, item_input, labels)
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size=256, shuffle=True, num_workers=4)
+
 
     ####* set model, loss, and optimizer
     config['num_users'] = num_of_user
